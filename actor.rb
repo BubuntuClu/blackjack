@@ -7,7 +7,7 @@ class Actor
   def initialize(name)
     self.name = name
     self.bank = 100
-    self.hand = Hand.new()
+    self.hand = Hand.new
   end
 
   def pass
@@ -19,6 +19,10 @@ class Actor
 
   def show_current_score
     self.hand.get_total
+  end
+
+  def show_hand
+    self.hand.show_hand
   end
 
 end
