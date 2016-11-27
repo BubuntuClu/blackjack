@@ -1,13 +1,24 @@
 require_relative 'hand.rb'
 
 class Actor
-  attr_accessor :name, :bank, :cards
-  actions :pass, :take_card
+  attr_accessor :name, :bank, :hand
+  # actions :pass, :take_card
 
   def initialize(name)
     self.name = name
     self.bank = 100
-    self.cards = Hand.new()
+    self.hand = Hand.new()
+  end
+
+  def pass
+  end
+
+  def take_card
+    self.hand.add_card
+  end
+
+  def show_current_score
+    self.hand.get_total
   end
 
 end
