@@ -6,20 +6,20 @@ require_relative 'card.rb'
 
 game = Game.new
 loop do
-  puts "Do you want to play?(y/n)"
+  puts 'Do you want to play?(y/n)'
   ans = gets.chomp.to_s.downcase
-  if ans == "y"
+  if ans == 'y'
     if game.can_player_play? && game.can_dealer_play?
-      game.play_round 
+      game.play_round
       game.end_round
     else
-      puts " u havent got enought money to play!Bye" unless game.can_player_play?
-      puts " delaer got enought money to play!U r lucky one!!!" unless game.can_dealer_play?
+      puts 'U havent got enought money to play!Bye' unless game.can_player_play?
+      puts 'Dealer havent got enought money to play!U r lucky one!!!' unless game.can_dealer_play?
       break
     end
   end
-  if ans == "n"
-    puts "See u next time. Bye!" 
+  if ans == 'n'
+    puts 'See u next time. Bye!'
     break
   end
 end

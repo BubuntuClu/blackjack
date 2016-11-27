@@ -1,17 +1,20 @@
 class Card
-  attr_accessor :rank, :suit
   def initialize(rank, suit)
     self.rank = rank
     self.suit = suit
   end
 
   def show_card
-    "#{self.rank}#{self.suit} "
+    "#{rank}#{suit} "
   end
 
-  def get_value
-    return 10 if ["J","Q","K"].include?self.rank
-    return self.rank.to_i if (2..10).to_a.include?self.rank.to_i
-    return 11 if self.rank == "A"
+  def value
+    return 10 if %w(J Q K).include?rank
+    return rank.to_i if (2..10).to_a.include?rank.to_i
+    return 11 if rank == 'A'
   end
+
+  private
+
+  attr_accessor :rank, :suit
 end
