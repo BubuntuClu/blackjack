@@ -5,6 +5,7 @@ require_relative 'deck.rb'
 class Game
 
   attr_accessor :players, :bet
+  BANK = 100
 
   def initialize
     self.players = []
@@ -12,8 +13,8 @@ class Game
     
       # puts "Whats name of player #{i}?"
       # name = gets.chomp.to_s
-    self.players << Player.new("test")
-    self.players << Actor.new("dealer")
+    self.players << Player.new("test",BANK)
+    self.players << Actor.new("dealer",BANK)
   end
 
   def play_round
@@ -30,26 +31,20 @@ class Game
     self.players.each do |player|
       if player.instance_of?Player
         puts "what u can do:"
-        puts "1. pass"
-        puts "2. take card"
-        puts "3. open cards"
-        i = gets.chomp.to_i
-        case i
-        when 1
-          puts "u want to pass"
-        when 2
-          puts "u take card"
-          player.take_card
-        when 3 
+        player.what_player_can_do
+        action = gets.chomp.sub(' ','_').downcase
+        
+        case action
+        when "show_cards"
           break
-        else
-        end
+         else
+          player.do_action(action.to_sym)
+         end
       else
         if player.hand.get_total < 18
-          player.take_card
-          puts "#{player.name} score is : #{player.show_current_score}"
+          player.do_action("take_card".to_sym)
         else
-          puts " dealer turn"
+          player.do_action("pass".to_sym)
         end
       end
     end
@@ -59,23 +54,25 @@ class Game
   def who_win
     player_info(players[0])
     player_info(players[-1])
-    if players[0].hand.get_total == players[-1].hand.get_total && players[0].hand.get_total < 22
+    ps = players[0].hand.get_total
+    ds = players[-1].hand.get_total
+    if ps == ds && ps < 22
       players[0].bank += self.bet/2
       players[-1].bank += self.bet/2
       puts "Draw!"
     end
 
-    if players[0].hand.get_total > players[-1].hand.get_total && players[0].hand.get_total < 22
+    if (ps > ds && ps < 22) || (ps < 22 && ds > 21)
       players[0].bank += self.bet
       puts "YOU WIN!!"
     end
 
-    if players[0].hand.get_total < players[-1].hand.get_total && players[0].hand.get_total < 22
+    if (ps < ds && ps < 22 && ds < 22) || (ps > 21 && ds < 22)
       players[-1].bank += self.bet
       puts "YOU LOSE!!"
     end
 
-    if players[-1].hand.get_total > 21 && players[0].hand.get_total > 21
+    if ds > 21 && ps > 21
       puts "No one get the bank!!"
     end
     self.bet = 0
@@ -90,8 +87,13 @@ class Game
   end
 
   def can_player_play?
-    false if players[0].bank == 0
-    true
+    return true if players[0].bank > 0
+    false
+  end
+
+  def can_dealer_play?
+    return true if players[-1].bank > 0
+    false
   end
 
   private

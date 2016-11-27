@@ -1,13 +1,16 @@
 require_relative 'hand.rb'
+require_relative 'actions.rb'
 
 class Actor
+  include ActionMethods
   attr_accessor :name, :bank, :hand
-  # actions :pass, :take_card
+  actions :pass, :take_card
 
-  def initialize(name)
+  def initialize(name,bank)
     self.name = name
-    self.bank = 100
+    self.bank = bank
     self.hand = Hand.new
+    action!
   end
 
   def pass

@@ -9,11 +9,12 @@ loop do
   puts "Do you want to play?(y/n)"
   ans = gets.chomp.to_s.downcase
   if ans == "y"
-    if game.can_player_play?
+    if game.can_player_play? && game.can_dealer_play?
       game.play_round 
       game.end_round
     else
-      puts " u havent got enought money to play!Bye" 
+      puts " u havent got enought money to play!Bye" unless game.can_player_play?
+      puts " delaer got enought money to play!U r lucky one!!!" unless game.can_dealer_play?
       break
     end
   end
